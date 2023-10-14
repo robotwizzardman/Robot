@@ -45,3 +45,10 @@ std::vector<std::string> parseIPAddresses(const std::string& arpOutput) {
 
     return ipAddresses;
 }
+
+std::vector<std::string> gimme_ip_adresses() {
+    // proszê system operacyjny podanie wszystkich adresów z którymi jest po³¹czony
+    std::string arpOutput = executeCommand(cmd);
+    // parsuje otrzymany string na wektor zawieraj¹cy same adressy
+    return parseIPAddresses(arpOutput);
+}

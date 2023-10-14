@@ -11,6 +11,7 @@
 #include "chooser.h"
 #include "converter.h"
 #include "Camera.h"
+#include "frame.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -31,12 +32,9 @@ int main()
 
     try
     {
-        // proszê system operacyjny podanie wszystkich adresów z którymi jest po³¹czony
-        std::string arpOutput = executeCommand(cmd); 
-        // parsuje otrzymany string na wektor zawieraj¹cy same adressy
-        std::vector<std::string> ipAddresses = parseIPAddresses(arpOutput);
-        // pytam siê ka¿dego kim s¹ i sprawdzam odpowiedŸ, z tego wiem kim s¹
-        string ip_lewe_oko = verify(ipAddresses, haslo_lewe_oko);     
+        // znajduje ip do urz¹dzenia
+        std::vector<std::string> ip_Addresses = gimme_ip_adresses();
+        string ip_lewe_oko = verify(ip_Addresses, haslo_lewe_oko);     
 
         // obiekty potrzebne do utworzenia websocketa
         net::io_context ioc;
@@ -68,19 +66,6 @@ int main()
         else
             throw std::runtime_error("Nie uda³o siê po³¹czyæ");
 
-        // wyœlij wiadomoœæ
-        /*
-        std::string text;
-        std::cout << "prosze podaæ polecenie";
-        std::cin >> text;
-        ws.write(net::buffer(std::string(text)));
-
-        // odczytaj widomoœæ
-        beast::flat_buffer buffer;
-        ws.read(buffer);
-
-        saveFlatBufferAsGrayscaleJPEG(buffer, width, height, filename);
-        */
         Camera(ws, width, height);
         
         // Close the WebSocket connection
